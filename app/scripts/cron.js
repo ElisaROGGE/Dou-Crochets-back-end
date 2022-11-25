@@ -11,11 +11,11 @@ async function task(){
    let existTopPRoduct =  await categoryService.findOneCategoryId('topProduit')
     
     // si il n'existe pas le nom "topProduit" dans les categories
-   if(existTopPRoduct[0]==undefined){
+   if(existTopPRoduct[0].name !=='topProduit'){
         //creer la categorie
-        const categoryTop = await categoryService.createCategory({name:'topProduit'})
+        const categoryTop = categoryService.createCategory('topProduit')
         //refet un findall pour recuperer toute les categorye
-       
+        existTopPRoduct =  await categoryService.findOneCategoryId('topProduit')
     }  
 
     existTopPRoduct =  await categoryService.findOneCategoryId('topProduit')
