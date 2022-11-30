@@ -25,18 +25,18 @@ const connectionParams={
     useNewUrlParser: true,
     useUnifiedTopology: true 
 }
-// Pour se connecter en local
+//Pour se connecter en local
  mongoose.connect(mongoDB).then(r => {
     console.log('Connected to MongoDB')
  });
 
 // Pour se connecter au live
-/*mongoose.connect(url, connectionParams).then(() => {
-    console.log("Connected to MongoDB")
-})
-.catch( (err) => {
-    console.error(`Error connecting to the database. n${err}`);
-});*/
+// mongoose.connect(url, connectionParams).then(() => {
+//     console.log("Connected to MongoDB")
+// })
+// .catch( (err) => {
+//     console.error(`Error connecting to the database. n${err}`);
+// });
 
 const db = mongoose.connection;
 // Bind connection to error event (to get notification of connection errors)

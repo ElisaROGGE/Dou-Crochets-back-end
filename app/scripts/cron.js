@@ -85,7 +85,7 @@ async function task(){
 
             // modifie la category de chaque produit pour ajouter la categorie top Produit !!!!!
            
-            for(let index = 0; index < 10; index++){
+            for(let index = 0; index < 2; index++){
 
 
                 result[index].product.category.push(existTopPRoduct[0]._id)
