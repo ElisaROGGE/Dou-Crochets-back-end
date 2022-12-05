@@ -9,9 +9,8 @@ const job = require('./app/scripts/cron')
 const RoleRoutes = require('./app/routes/role.router')
 const UserRoutes = require('./app/routes/user.router')
 const ProductRoutes = require('./app/routes/product.router');
-
 const CategoryRoutes = require('./app/routes/category.router');
-
+const SupportRoutes = require('./app/routes/support.router');
 const AdminRoutes = require('./app/routes/product.router');
 
 const { constants } = require('fs/promises');
@@ -25,18 +24,18 @@ const connectionParams={
     useNewUrlParser: true,
     useUnifiedTopology: true 
 }
-//Pour se connecter en local
- mongoose.connect(mongoDB).then(r => {
-    console.log('Connected to MongoDB')
- });
+// Pour se connecter en local
+/* mongoose.connect(mongoDB).then(r => {
+     console.log('Connected to MongoDB local')
+ });*/
 
-// Pour se connecter au live
-// mongoose.connect(url, connectionParams).then(() => {
-//     console.log("Connected to MongoDB")
-// })
-// .catch( (err) => {
-//     console.error(`Error connecting to the database. n${err}`);
-// });
+//Pour se connecter au live
+mongoose.connect(url, connectionParams).then(() => {
+    console.log("Connected to MongoDB live")
+})
+.catch( (err) => {
+    console.error(`Error connecting to the database. n${err}`);
+});
 
 const db = mongoose.connection;
 // Bind connection to error event (to get notification of connection errors)
@@ -64,10 +63,10 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use("/role", RoleRoutes)
 app.use("/users", UserRoutes);
 app.use('/products', ProductRoutes);
-
 app.use('/products', CategoryRoutes);
-
 app.use('/admin', AdminRoutes)
+
+app.use('/support', SupportRoutes)
 
 
 

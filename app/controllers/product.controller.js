@@ -6,8 +6,10 @@ const findAll = async (req,res) => {
     ProductService.findAll().then(response => res.send(response)).catch(err => res.send(err));
  };
  
+ 
 const findAllPage = async (req,res) => {
-   ProductService.page(req.params.id).then(response => res.send(response)).catch(err => res.send(err));
+
+   ProductService.page(req.params.name,req.params.id).then(response => res.send(response)).catch(err => res.send(err));
 };
 
 const findAllNouveau = async (req,res) => {
@@ -23,6 +25,7 @@ const findAllNouveau = async (req,res) => {
     };
 
 const create = async (req, res) => {
+    console.log(req);
 
     //créer tout d'abord l 'objet produit en ajoutant les id de categorie
     ProductService.create(req.body,
@@ -32,9 +35,7 @@ const create = async (req, res) => {
             res.status(500).send({
                 message: err.message || 'Some error occurred while creating the Product.',
             });
-        })
-         
-         
+        })                
 }
 
 const findAllTop = async (req,res) => {
@@ -49,10 +50,10 @@ const findAllTop = async (req,res) => {
 
     const deleteProduct = (req, res) => {
         ProductService.deleteProduct(req.params).then((data) => {
-            res.status(201).send(data)
+            res.status(200).send(data)
         }).catch((err) => {
             res.status(500).send({
-                message: err.message || 'Some error occurred while creating the Product.',
+                message: err.message || 'Erreur dans la suppression du produit',
             });
         })
     }
@@ -65,7 +66,16 @@ const findAllTop = async (req,res) => {
             })
         });
     }
+    const updateProduct = async (req, res) => {
+        console.log(req.file);
+        const image = req?.file?.originalname && req.protocol + '://' + req.get('host') + '/uploads/' + req.file.originalname
+        ProductService.updateProduct(req, image).then((data) => {           
+            res.status(201).send(data)
+        }).catch(error => {
+            res.status(400).send(error);       });
+            console.log(res);
+    }
     
-    module.exports = {findAll,findAllPage, findOne, create, findAllNouveau, deleteProduct, findAllTop};
+    module.exports = {findAll,findAllPage, findOne, create, findAllNouveau, deleteProduct, findAllTop, updateProduct};
     
 

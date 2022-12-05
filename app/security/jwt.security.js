@@ -9,4 +9,11 @@ const jwtSecurity = (id, email,telephone, role, firstname, lastname, birthdate, 
         });
 }
 
-module.exports = jwtSecurity;
+const decode=(token)=>{
+
+return jwt.decode(token)
+
+
+}
+
+module.exports = {jwtSecurity,decode};

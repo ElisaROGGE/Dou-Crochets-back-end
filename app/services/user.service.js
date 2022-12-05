@@ -1,6 +1,6 @@
 const User = require('../models/user.model');
 const Address = require('../models/address.model');
-const roleService = require('./role.service')
+const roleService = require('./role.service');
 const adresseservice = require('./adresse.service')
 const asyncHandler = require("express-async-handler");
 const generateToken = require('../security/jwt.security');
@@ -8,6 +8,7 @@ const bcrypt = require('bcryptjs');
 const roleModel = require("../models/role.model");
 const { find, findById } = require('../models/role.model');
 const { use } = require('../routes/role.router');
+
 
 const checkPass = (req, res) => {
     if (req.body.password === req.body.confirmpassword) {
@@ -80,7 +81,8 @@ const checkUser = asyncHandler(async (req, res) => {
             firstname: user.firstname,
             lastname: user.lastname,
             email: user.email,
-            token: generateToken(user._id, user.email,user.telephone, user.role, user.firstname, user.lastname, user.birthdate, user.adresse)
+            token: generateToken.jwtSecurity(user._id , user.email, user.telephone, user.role.role, user.firstname, user.lastname, user.birthdate, user.adresse)
+
         })
     } else {
         res.status(401).send("Utilisateur non trouvé")
@@ -116,6 +118,7 @@ const deleteUser = async (id, res) => {
         async function (err, docs) {
             if (err) {
                 console.log(err)
+                return res.status(400).send(err)
             }
             else {
                 console.log("Updated User : ", docs.adresse.toString());
@@ -123,6 +126,7 @@ const deleteUser = async (id, res) => {
                     street: "xxxx",
                     number: "xxxx"
                 })
+                return res.status(200).send(docs)
             }
         })
 }
@@ -150,7 +154,7 @@ const updateUser = async (req, res)=>{
                 })
                 const user = await User.findById(req.params.id).populate('adresse')
                 res.status(200).json({
-                    token: generateToken(user._id, user.email,user.telephone, user.role, user.firstname, user.lastname, user.birthdate, user.adresse)
+                    token: generateToken.jwtSecurity(user._id, user.email,user.telephone, user.role, user.firstname, user.lastname, user.birthdate, user.adresse)
                 })
             }
         })
@@ -170,6 +174,7 @@ const editUser = async (id, roleSelect, res) => {
             }
         })
 
+   
 
 };
 
