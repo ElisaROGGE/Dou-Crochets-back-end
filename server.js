@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const BddCreate = require('./app/scripts/createBdd.script') 
 const path = require('path')
 const job = require('./app/scripts/cron')
+const stripe = require('stripe')('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
 
 const RoleRoutes = require('./app/routes/role.router')
 const UserRoutes = require('./app/routes/user.router')
@@ -18,7 +19,7 @@ const { constants } = require('fs/promises');
 const mongoDB = process.env.DB_LOCAL;
 const url = process.env.DB_LIVE;
 const PORT = serverConfig.PORT || 5000
-const app = express()
+const app = express();
 
 const connectionParams={
     useNewUrlParser: true,
@@ -67,6 +68,25 @@ app.use('/products', CategoryRoutes);
 app.use('/admin', AdminRoutes)
 
 app.use('/support', SupportRoutes)
+
+app.post("/create-payment-intent", async (req, res) => {
+  const { items } = req.body;
+
+
+const paymentIntent = await stripe.paymentIntents.create({
+  amount: calculateOrderAmount(items),
+  currency: "usd",
+  automatic_payment_methods: {
+    enabled: true,
+  },
+});
+res.send({
+  clientSecret: paymentIntent.client_secret,
+});
+
+});
+  
+  
 
 
 
